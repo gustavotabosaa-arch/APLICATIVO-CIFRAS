@@ -532,19 +532,36 @@
     sel.innerHTML = allKeyOptions().map(o=>`<option value="${o.v}">${o.l}</option>`).join('');
   }
 
-  // ---------- CONVERSOR DE CIFRA TRADICIONAL ----------
-  const CHORD_TOKEN_RE = /^[A-G][#b]?(?:(?:maj|min|dim|aug|sus|add|m)?\d{0,2}[Mm]?){0,3}(?:\/[A-G][#b]?)?$/;
-  function isChordToken(tok){ return tok.length>0 && tok.length<=9 && CHORD_TOKEN_RE.test(tok); }
+  // ---------- CONVERSOR DE CIFRA TRADICIONAL (Fase 1.2: normalização robusta) ----------
+  // Suporta acordes complexos: slash chords (G/B), extensões com parênteses (F7M(2), Am7(9)),
+  // sus/add/dim/aug, e tolera artefatos de colagem (">", "»", tags HTML residuais).
+  const CHORD_TOKEN_RE = /^[A-G][#b]?(?:(?:maj|min|dim|aug|sus|add|m)?\d{0,2}[Mm]?){0,3}(?:\([^()]{1,8}\))?(?:\/[A-G][#b]?)?$/;
+  function isChordToken(tok){ return tok.length>0 && tok.length<=14 && CHORD_TOKEN_RE.test(tok); }
   function lineTokens(line){ const t=line.trim(); return t.length? t.split(/\s+/) : []; }
+
+  // Remove tags HTML e decodifica entidades comuns que possam ter vazado da colagem —
+  // os dados da música nunca devem guardar HTML, só texto com acordes entre colchetes.
+  function sanitizePastedText(raw){
+    let t = raw.replace(/<[^>]+>/g, '');
+    t = t.replace(/&nbsp;/gi,' ').replace(/&amp;/gi,'&').replace(/&lt;/gi,'<').replace(/&gt;/gi,'>').replace(/&quot;/gi,'"').replace(/&#39;/gi,"'");
+    return t;
+  }
+  // Remove marcadores residuais de colagem (ex: '">', '»', '›') do início de uma linha,
+  // sem mexer no restante do conteúdo.
+  function stripLeadingArtifacts(line){
+    return line.replace(/^\s*(?:">|"|»|›|>)+\s*/, '');
+  }
+
   function isChordOnlyLine(line){
-    const clean = line.replace(/^">\s*/,'').replace(/^»\s*/,'');
+    const clean = stripLeadingArtifacts(line);
     const t = lineTokens(clean);
     return t.length>0 && t.every(isChordToken);
   }
   function isSectionTag(line){ return /^\[[^\]]+\]/.test(line.trim()); }
   function isTabLine(line){ return /^[EBGDAe]\s*\|/.test(line.trim()) || /^\s*\|?-+\|?\s*$/.test(line); }
 
-  function convertCifraTradicional(raw){
+  function convertCifraTradicional(rawInput){
+    const raw = sanitizePastedText(rawInput);
     const lines = raw.replace(/\r\n/g,'\n').split('\n');
     const out = [];
     let i = 0;
@@ -564,7 +581,7 @@
         i++; continue;
       }
       if(isChordOnlyLine(line)){
-        const clean = line.replace(/^">\s*/,'').replace(/^»\s*/,'');
+        const clean = stripLeadingArtifacts(line);
         const prefixLen = line.length - clean.length;
         const positions = [];
         const re = /\S+/g; let mm;
@@ -574,8 +591,10 @@
         if(nextIsLyric){
           let merged = next;
           if(positions.length === 1){
+            // linha com um único acorde (formatos "simplificados" não usam alinhamento real de coluna)
             merged = '['+positions[0].token+']' + merged;
           } else {
+            // várias posições — usa a coluna real de cada acorde sobre a linha de letra
             positions.slice().sort((a,b)=>b.col-a.col).forEach(p=>{
               const at = Math.min(p.col, merged.length);
               merged = merged.slice(0,at) + '['+p.token+']' + merged.slice(at);
@@ -584,6 +603,7 @@
           out.push(merged);
           i += 2; continue;
         } else {
+          // linha só de acordes sem letra correspondente (ex: intro/solo) — preserva, não descarta
           out.push(positions.map(p=>'['+p.token+']').join(' '));
           i++; continue;
         }
@@ -788,7 +808,7 @@
     const title = document.getElementById('form-title').value.trim();
     const artist = document.getElementById('form-artist').value.trim();
     const key = formKeySelect.value;
-    const body = document.getElementById('form-body').value;
+    const body = sanitizePastedText(document.getElementById('form-body').value);
     const notes = document.getElementById('form-notes').value.trim();
     const tags = document.getElementById('form-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
     if(!title || !body.trim()){ showToast('Preencha ao menos o título e a cifra.'); return; }
