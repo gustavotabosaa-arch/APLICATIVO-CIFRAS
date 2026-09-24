@@ -559,10 +559,16 @@
   }
   function isSectionTag(line){ return /^\[[^\]]+\]/.test(line.trim()); }
   function isTabLine(line){ return /^[EBGDAe]\s*\|/.test(line.trim()) || /^\s*\|?-+\|?\s*$/.test(line); }
-
+  function expandTabs(line){
+    let out='';
+    for(const ch of line){
+      if(ch==='\t'){ const n=4-(out.length%4); out+=' '.repeat(n); } else out+=ch;
+    }
+    return out;
+  }
   function convertCifraTradicional(rawInput){
     const raw = sanitizePastedText(rawInput);
-    const lines = raw.replace(/\r\n/g,'\n').split('\n');
+    const lines = raw.replace(/\r\n/g,'\n').split('\n').map(expandTabs);
     const out = [];
     let i = 0;
     while(i < lines.length){
@@ -590,16 +596,11 @@
         const nextIsLyric = next!==undefined && next.trim()!=='' && !isChordOnlyLine(next) && !isSectionTag(next) && !isTabLine(next);
         if(nextIsLyric){
           let merged = next;
-          if(positions.length === 1){
-            // linha com um único acorde (formatos "simplificados" não usam alinhamento real de coluna)
-            merged = '['+positions[0].token+']' + merged;
-          } else {
-            // várias posições — usa a coluna real de cada acorde sobre a linha de letra
-            positions.slice().sort((a,b)=>b.col-a.col).forEach(p=>{
-              const at = Math.min(p.col, merged.length);
-              merged = merged.slice(0,at) + '['+p.token+']' + merged.slice(at);
-            });
-          }
+                  // FASE 1.2.1 — sempre usa a coluna real de cada acorde
+          positions.slice().sort((a,b)=>b.col-a.col).forEach(p=>{
+            const at = Math.min(p.col, merged.length);
+            merged = merged.slice(0,at) + '['+p.token+']' + merged.slice(at);
+          });
           out.push(merged);
           i += 2; continue;
         } else {
