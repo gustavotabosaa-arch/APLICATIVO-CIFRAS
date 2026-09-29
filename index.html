@@ -1,67 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tônica</title>
 <style>
   :root{
-    --bg:#1B1712;
-    --surface:#241E17;
-    --surface-2:#2E2619;
-    --line:#3A3025;
-    --gold:#CBA35C;
-    --gold-dim:#8F7442;
-    --teal:#4C8577;
-    --teal-dim:#345C52;
-    --text:#F2EBDD;
-    --text-muted:#A8977E;
-    --danger:#B25B4A;
-    /* aliases semânticos (Fase 1.1) — mapeiam para as variáveis já existentes acima */
-    --chord: var(--gold);
-    --accent: var(--gold);
-    --border: var(--line);
-    --button: var(--gold);
-    --button-text: #1B1712;
+    --bg:#1B1712;--surface:#241E17;--surface-2:#2E2619;--line:#3A3025;
+    --gold:#CBA35C;--gold-dim:#8F7442;--teal:#4C8577;--teal-dim:#345C52;
+    --text:#F2EBDD;--text-muted:#A8977E;--danger:#B25B4A;
+    --chord: var(--gold);--accent: var(--gold);--border: var(--line);
+    --button: var(--gold);--button-text: #1B1712;
     --font-display: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
     --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'SF Mono', Menlo, Consolas, monospace;
   }
-  /* Tema claro (Fase 1.1) — ativado via [data-theme="light"] no .tonica-app */
   .tonica-app[data-theme="light"]{
-    --bg:#F7F8FA;
-    --surface:#FFFFFF;
-    --surface-2:#EEF0F3;
-    --line:#DCE0E5;
-    --gold:#B5762A;
-    --gold-dim:#D9A96A;
-    --teal:#3E7A6B;
-    --teal-dim:#BFE0D6;
-    --text:#171A1F;
-    --text-muted:#5B6470;
-    --danger:#B23A2A;
-    --chord: var(--gold);
-    --accent: var(--gold);
-    --border: var(--line);
-    --button: var(--gold);
-    --button-text: #FFFFFF;
+    --bg:#F7F8FA;--surface:#FFFFFF;--surface-2:#EEF0F3;--line:#DCE0E5;
+    --gold:#B5762A;--gold-dim:#D9A96A;--teal:#3E7A6B;--teal-dim:#BFE0D6;
+    --text:#171A1F;--text-muted:#5B6470;--danger:#B23A2A;
+    --chord: var(--gold);--accent: var(--gold);--border: var(--line);
+    --button: var(--gold);--button-text: #FFFFFF;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0;background:#1B1712;}
+  :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
   .tonica-app{
-    background:var(--bg);
-    color:var(--text);
-    font-family:var(--font-body);
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    -webkit-font-smoothing:antialiased;
-    transition:background .2s ease, color .2s ease;
+    background:var(--bg);color:var(--text);font-family:var(--font-body);
+    min-height:100vh;display:flex;flex-direction:column;
+    -webkit-font-smoothing:antialiased;transition:background .2s ease, color .2s ease;
   }
   button, select, input, textarea, .icon-btn, .chip, .t-tab{ transition:background .15s ease, border-color .15s ease, color .15s ease; }
   button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible, .icon-btn:focus-visible, .chip:focus-visible, .t-tab:focus-visible, .song-card:focus-visible{
     outline:2px solid var(--accent); outline-offset:2px;
   }
-  .t-header{
-    position:sticky;top:0;z-index:20;
-    background:linear-gradient(180deg,var(--bg) 80%, transparent);
-    padding:18px 16px 10px;
-    border-bottom:1px solid var(--line);
-  }
+  .t-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:linear-gradient(180deg,var(--bg) 80%, transparent);padding:18px 16px 10px;border-bottom:1px solid var(--line);}
   .t-title-row{display:flex;align-items:baseline;gap:10px;}
   .t-title{font-family:var(--font-display);font-size:26px;letter-spacing:0.02em;color:var(--gold);margin:0;}
   .t-tagline{font-size:12px;color:var(--text-muted);margin:0 0 12px;}
@@ -81,13 +54,10 @@
     .t-tab{font-size:15px;padding:13px 10px;}
     .cifra-body{font-size:16px;}
   }
-  @media (min-width:1100px){
-    .t-main{max-width:840px;}
-  }
+  @media (min-width:1100px){ .t-main{max-width:840px;} }
   .t-view{display:none;animation:fadein .25s ease;}
   .t-view.active{display:block;}
   @keyframes fadein{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
-
   .t-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;}
   .t-card h3{font-family:var(--font-display);font-size:16px;margin:0 0 12px;color:var(--gold);font-weight:normal;}
   .t-row{display:flex;gap:10px;margin-bottom:10px;}
@@ -95,13 +65,10 @@
   .t-field label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);}
   select,input[type=text],input[type=date],textarea{
     background:var(--surface-2);color:var(--text);border:1px solid var(--border);
-    border-radius:8px;padding:11px 10px;min-height:44px;font-size:15px;font-family:var(--font-body);
-    width:100%;
+    border-radius:8px;padding:11px 10px;min-height:44px;font-size:15px;font-family:var(--font-body);width:100%;
   }
   select:focus,input:focus,textarea:focus{outline:2px solid var(--gold-dim);}
   textarea{font-family:var(--font-mono);font-size:13.5px;line-height:1.6;resize:vertical;min-height:140px;}
-
-  /* Roda dos tons */
   .roda-wrap{display:flex;justify-content:center;padding:14px 0 8px;}
   .roda{position:relative;width:250px;height:250px;}
   .roda-center{
@@ -122,7 +89,6 @@
   .roda-peg .deg{font-size:9px;color:var(--text-muted);font-weight:400;}
   .roda-peg.tonic{background:var(--button);color:var(--button-text);}
   .roda-peg.tonic .deg{color:var(--button-text);opacity:.7;}
-
   .diat-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
   .chip{
     background:var(--surface-2);border:1px solid var(--border);border-radius:20px;
@@ -132,78 +98,49 @@
   .chip:hover{background:var(--teal-dim);}
   .chip .deg{color:var(--text-muted);font-size:11px;}
   .chip.active{background:var(--button);color:var(--button-text);}
-
   .preset-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
-  .preset-btn{
-    background:transparent;border:1px solid var(--teal-dim);color:var(--teal);
-    border-radius:20px;padding:6px 12px;font-size:12.5px;cursor:pointer;
-  }
+  .preset-btn{background:transparent;border:1px solid var(--teal-dim);color:var(--teal);border-radius:20px;padding:6px 12px;font-size:12.5px;cursor:pointer;}
   .preset-btn:hover{background:var(--teal-dim);color:var(--text);}
-
-  .seq-box{background:var(--surface-2);border-radius:10px;padding:12px;min-height:48px;
-    display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;}
+  .seq-box{background:var(--surface-2);border-radius:10px;padding:12px;min-height:48px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;}
   .seq-empty{color:var(--text-muted);font-size:13px;font-style:italic;}
   .seq-chord{background:var(--bg);border:1px solid var(--gold-dim);border-radius:8px;padding:8px 10px;text-align:center;min-width:52px;}
   .seq-chord .name{font-weight:700;font-size:15px;color:var(--gold);}
   .seq-chord .deg{font-size:10px;color:var(--text-muted);}
   .seq-actions{display:flex;gap:8px;}
-
-  .btn{
-    background:var(--button);color:var(--button-text);border:none;border-radius:8px;
-    padding:12px 16px;min-height:44px;font-size:14px;font-weight:600;cursor:pointer;
-  }
+  .btn{background:var(--button);color:var(--button-text);border:none;border-radius:8px;padding:12px 16px;min-height:44px;font-size:14px;font-weight:600;cursor:pointer;}
   .btn.secondary{background:transparent;border:1px solid var(--border);color:var(--text);}
   .btn.danger{background:transparent;border:1px solid var(--danger);color:var(--danger);}
   .btn:active{transform:scale(.97);}
-
   .result-pair{display:flex;gap:10px;margin-top:10px;}
   .result-col{flex:1;background:var(--surface-2);border-radius:10px;padding:10px;}
   .result-col .lbl{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
   .result-chords{display:flex;flex-wrap:wrap;gap:6px;}
   .result-chords .c{background:var(--bg);border-radius:6px;padding:5px 8px;font-size:13.5px;font-weight:600;color:var(--gold);}
-
-  /* Cifras */
   .search-row{display:flex;gap:8px;margin-bottom:14px;}
   .search-row input{flex:1;}
-  .song-card{
-    background:var(--surface);border:1px solid var(--line);border-radius:12px;
-    padding:12px 14px;margin-bottom:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;
-  }
+  .song-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;}
   .song-card:hover{border-color:var(--gold-dim);}
   .song-title{font-weight:600;font-size:15px;}
   .song-artist{font-size:12.5px;color:var(--text-muted);}
   .song-card-right{display:flex;align-items:center;gap:6px;flex-shrink:0;}
   .key-badge{background:var(--surface-2);border-radius:20px;padding:4px 10px;font-size:12px;color:var(--gold);white-space:nowrap;}
-  .icon-btn{
-    background:var(--surface-2);border:1px solid var(--border);border-radius:8px;
-    width:40px;height:40px;min-width:40px;display:flex;align-items:center;justify-content:center;
-    cursor:pointer;font-size:16px;color:var(--text-muted);flex-shrink:0;
-  }
+  .icon-btn{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;width:40px;height:40px;min-width:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text-muted);flex-shrink:0;}
   .icon-btn:hover{color:var(--text);border-color:var(--gold-dim);}
   .icon-btn.delete:hover{color:var(--danger);border-color:var(--danger);}
   .empty-state{text-align:center;color:var(--text-muted);padding:40px 20px;font-size:14px;}
-
-  .cifra-body{
-    font-family:var(--font-mono);font-size:14.5px;line-height:2.2;white-space:pre-wrap;
-    background:var(--surface-2);border-radius:10px;padding:14px;margin-top:12px;
-  }
-  .cifra-body .chord-tag{
-    background:var(--chord);color:var(--button-text);border-radius:5px;padding:2px 7px;
-    font-weight:700;font-size:13.5px;margin:0 2px;white-space:nowrap;
-    box-shadow:0 1px 2px rgba(0,0,0,.25);
-  }
+  .cifra-body{font-family:var(--font-mono);font-size:14.5px;line-height:2.2;white-space:pre-wrap;background:var(--surface-2);border-radius:10px;padding:14px;margin-top:12px;overflow-x:auto;}
+  .cifra-body .chord-tag{background:var(--chord);color:var(--button-text);border-radius:5px;padding:2px 7px;font-weight:700;font-size:13.5px;margin:0 2px;white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,.25);}
+  .cifra-body .chord-line{color:var(--chord);font-weight:700;}
   .transpose-row{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap;}
-  .step-btn{
-    background:var(--surface-2);border:1px solid var(--border);color:var(--text);
-    width:40px;height:40px;min-width:40px;border-radius:8px;font-size:18px;cursor:pointer;
-  }
+  .step-btn{background:var(--surface-2);border:1px solid var(--border);color:var(--text);width:40px;height:40px;min-width:40px;border-radius:8px;font-size:18px;cursor:pointer;}
   .shift-indicator{font-size:13px;color:var(--text-muted);min-width:60px;text-align:center;}
   .helper-text{font-size:12px;color:var(--text-muted);margin-top:4px;line-height:1.5;}
   .top-actions{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
   .back-link{color:var(--teal);font-size:13.5px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
   h2.section-heading{font-family:var(--font-display);font-size:19px;font-weight:normal;color:var(--text);margin:0 0 4px;}
 </style>
-
+</head>
+<body>
 <div class="tonica-app">
   <div class="t-header">
     <div class="t-title-row" style="justify-content:space-between;">
@@ -219,17 +156,12 @@
   </div>
 
   <div class="t-main">
-    <!-- ESTUDO MUSICAL -->
     <div class="t-view active" id="view-estudo">
       <div class="t-card">
         <h3>Escolha o tom</h3>
         <div class="t-row">
-          <div class="t-field">
-            <label>Tônica</label>
-            <select id="est-tonic"></select>
-          </div>
-          <div class="t-field">
-            <label>Modo</label>
+          <div class="t-field"><label>Tônica</label><select id="est-tonic"></select></div>
+          <div class="t-field"><label>Modo</label>
             <select id="est-mode">
               <option value="maior">Maior</option>
               <option value="menor">Menor (natural)</option>
@@ -239,8 +171,7 @@
           </div>
         </div>
         <div class="t-row">
-          <div class="t-field">
-            <label>Tipo de acorde</label>
+          <div class="t-field"><label>Tipo de acorde</label>
             <select id="chord-mode">
               <option value="triade">Tríade</option>
               <option value="tetrade">Tétrade (com 7ª)</option>
@@ -261,32 +192,18 @@
           <button class="btn secondary" id="seq-clear">Limpar</button>
         </div>
         <div class="t-row" style="margin-top:14px;">
-          <div class="t-field">
-            <label>Tom de destino</label>
-            <select id="dest-tonic"></select>
-          </div>
-          <div class="t-field">
-            <label>Modo de destino</label>
-            <select id="dest-mode">
-              <option value="maior">Maior</option>
-              <option value="menor">Menor</option>
-            </select>
+          <div class="t-field"><label>Tom de destino</label><select id="dest-tonic"></select></div>
+          <div class="t-field"><label>Modo de destino</label>
+            <select id="dest-mode"><option value="maior">Maior</option><option value="menor">Menor</option></select>
           </div>
         </div>
         <div class="result-pair" id="result-pair" style="display:none;">
-          <div class="result-col">
-            <div class="lbl" id="result-orig-lbl">Original</div>
-            <div class="result-chords" id="result-orig"></div>
-          </div>
-          <div class="result-col">
-            <div class="lbl" id="result-dest-lbl">Destino</div>
-            <div class="result-chords" id="result-dest"></div>
-          </div>
+          <div class="result-col"><div class="lbl" id="result-orig-lbl">Original</div><div class="result-chords" id="result-orig"></div></div>
+          <div class="result-col"><div class="lbl" id="result-dest-lbl">Destino</div><div class="result-chords" id="result-dest"></div></div>
         </div>
       </div>
     </div>
 
-    <!-- CIFRAS -->
     <div class="t-view" id="view-cifras">
       <div id="cifras-list-screen">
         <div class="top-actions">
@@ -298,9 +215,7 @@
             <button class="btn" id="btn-new-song">+ Nova música</button>
           </div>
         </div>
-        <div class="search-row">
-          <input type="text" id="search-input" placeholder="Buscar por título ou artista...">
-        </div>
+        <div class="search-row"><input type="text" id="search-input" placeholder="Buscar por título ou artista..."></div>
         <div id="songs-container"></div>
       </div>
 
@@ -308,39 +223,28 @@
         <div class="back-link" id="form-back">‹ Voltar</div>
         <h2 class="section-heading" style="margin-top:10px;">Nova música</h2>
         <div class="t-card">
-          <div class="t-field" style="margin-bottom:10px;">
-            <label>Título</label>
-            <input type="text" id="form-title" placeholder="Ex: Grandioso és Tu">
-          </div>
-          <div class="t-field" style="margin-bottom:10px;">
-            <label>Artista / Ministério</label>
-            <input type="text" id="form-artist" placeholder="Ex: Diante do Trono">
-          </div>
-          <div class="t-field" style="margin-bottom:10px;">
-            <label>Tom original</label>
-            <select id="form-key"></select>
-          </div>
-          <div class="t-field" style="margin-bottom:10px;">
-            <label>Tags (separadas por vírgula)</label>
-            <input type="text" id="form-tags" placeholder="Ex: louvor, adoração, ceia">
-          </div>
+          <div class="t-field" style="margin-bottom:10px;"><label>Título</label><input type="text" id="form-title" placeholder="Ex: Grandioso és Tu"></div>
+          <div class="t-field" style="margin-bottom:10px;"><label>Artista / Ministério</label><input type="text" id="form-artist" placeholder="Ex: Diante do Trono"></div>
+          <div class="t-field" style="margin-bottom:10px;"><label>Tom original</label><select id="form-key"></select></div>
+          <div class="t-field" style="margin-bottom:10px;"><label>Tags (separadas por vírgula)</label><input type="text" id="form-tags" placeholder="Ex: louvor, adoração, ceia"></div>
           <div class="t-field">
             <label>Cifra</label>
             <textarea id="form-body" placeholder="Escreva o acorde entre colchetes antes da palavra, assim: [G]Grandioso és [D]Tu, [Em]Senhor meu [C]Deus..."></textarea>
             <p class="helper-text">Coloque cada acorde entre colchetes logo antes da sílaba onde ele entra. Isso permite transpor a música inteira automaticamente depois. Se preferir, cole no formato tradicional na caixa abaixo e converta automaticamente.</p>
           </div>
-          <div class="t-field" style="margin-top:10px;">
-            <label>Observações</label>
-            <input type="text" id="form-notes" placeholder="Ex: tocar mais lento no início, andamento 72 bpm">
-          </div>
+          <div class="t-field" style="margin-top:10px;"><label>Observações</label><input type="text" id="form-notes" placeholder="Ex: tocar mais lento no início, andamento 72 bpm"></div>
         </div>
-
+        <div class="t-card">
+          <h3>Importar de PDF</h3>
+          <p class="helper-text">Escolha um PDF de cifra com texto selecionável (não escaneado/foto). O conteúdo extraído aparece no campo "Cifra" acima — revise antes de salvar, a extração automática pode errar em layouts irregulares.</p>
+          <input type="file" id="pdf-input" accept="application/pdf" style="display:none;">
+          <button class="btn secondary" id="btn-import-pdf" style="width:100%;">Importar PDF</button>
+          <p class="helper-text" id="pdf-import-status" style="margin-top:8px;"></p>
+        </div>
         <div class="t-card">
           <h3>Converter de formato tradicional</h3>
           <p class="helper-text">Cole aqui a cifra no formato de acorde-em-cima-da-letra (como aparece nos sites de cifra) e clique em converter. Revise o resultado antes de salvar — a conversão automática pode errar em trechos com formatação irregular.</p>
-          <div class="t-field" style="margin-bottom:10px;">
-            <textarea id="paste-raw" placeholder="Cole aqui a cifra tradicional..."></textarea>
-          </div>
+          <div class="t-field" style="margin-bottom:10px;"><textarea id="paste-raw" placeholder="Cole aqui a cifra tradicional..."></textarea></div>
           <button class="btn secondary" id="btn-convert" style="width:100%;">Converter para o campo acima</button>
         </div>
         <button class="btn" id="btn-save-song" style="width:100%;">Salvar música</button>
@@ -366,7 +270,6 @@
       </div>
     </div>
 
-    <!-- REPERTÓRIO -->
     <div class="t-view" id="view-repertorio">
       <div id="rep-list-screen">
         <div class="top-actions">
@@ -375,33 +278,19 @@
         </div>
         <div id="setlists-container"></div>
       </div>
-
       <div id="rep-form-screen" style="display:none;">
         <div class="back-link" id="rep-form-back">‹ Voltar</div>
         <h2 class="section-heading" style="margin-top:10px;">Novo repertório</h2>
         <div class="t-card">
           <div class="t-row">
-            <div class="t-field">
-              <label>Nome</label>
-              <input type="text" id="setlist-name" placeholder="Ex: Culto de domingo">
-            </div>
-            <div class="t-field">
-              <label>Data</label>
-              <input type="date" id="setlist-date">
-            </div>
+            <div class="t-field"><label>Nome</label><input type="text" id="setlist-name" placeholder="Ex: Culto de domingo"></div>
+            <div class="t-field"><label>Data</label><input type="date" id="setlist-date"></div>
           </div>
         </div>
-        <div class="t-card">
-          <h3>Músicas no repertório</h3>
-          <div id="setlist-chosen"></div>
-        </div>
-        <div class="t-card">
-          <h3>Adicionar música</h3>
-          <div id="setlist-available"></div>
-        </div>
+        <div class="t-card"><h3>Músicas no repertório</h3><div id="setlist-chosen"></div></div>
+        <div class="t-card"><h3>Adicionar música</h3><div id="setlist-available"></div></div>
         <button class="btn" id="btn-save-setlist" style="width:100%;">Salvar repertório</button>
       </div>
-
       <div id="rep-detail-screen" style="display:none;">
         <div class="back-link" id="rep-detail-back">‹ Voltar</div>
         <h2 class="section-heading" id="rep-detail-title" style="margin-top:10px;"></h2>
@@ -414,20 +303,27 @@
 
 <script>
 (function(){
-  // ---------- FASE 1.1: TEMA CLARO/ESCURO ----------
+  // Armazenamento: localStorage (por navegador). Substitui window.storage, que só existe dentro do chat do Claude.
+  const storage = {
+    async get(k){ try{ const v = localStorage.getItem('tonica:'+k); return v===null ? null : {value:v}; }catch(e){ return null; } },
+    async set(k,v){ try{ localStorage.setItem('tonica:'+k, v); }catch(e){} }
+  };
+
+  // ---------- TEMA CLARO/ESCURO ----------
   let currentTheme = 'dark';
   function applyTheme(theme){
     const app = document.querySelector('.tonica-app');
     if(!app) return;
-    if(theme==='light'){ app.setAttribute('data-theme','light'); } else { app.removeAttribute('data-theme'); }
+    if(theme==='light'){ app.setAttribute('data-theme','light'); document.documentElement.style.background='#F7F8FA'; }
+    else { app.removeAttribute('data-theme'); document.documentElement.style.background='#1B1712'; }
     const btn = document.getElementById('theme-toggle');
     if(btn) btn.textContent = theme==='light' ? '☀️' : '🌙';
   }
   async function loadTheme(){
-    try{ const r = await window.storage.get('tema', false); return (r && r.value) ? r.value : 'dark'; }
+    try{ const r = await storage.get('tema'); return (r && r.value) ? r.value : 'dark'; }
     catch(e){ return 'dark'; }
   }
-  async function saveTheme(theme){ try{ await window.storage.set('tema', theme, false); }catch(e){} }
+  async function saveTheme(theme){ try{ await storage.set('tema', theme); }catch(e){} }
   const themeBtn = document.getElementById('theme-toggle');
   if(themeBtn){
     themeBtn.addEventListener('click', async ()=>{
@@ -436,10 +332,7 @@
       await saveTheme(currentTheme);
     });
   }
-  (async function initTheme(){
-    currentTheme = await loadTheme();
-    applyTheme(currentTheme);
-  })();
+  (async function initTheme(){ currentTheme = await loadTheme(); applyTheme(currentTheme); })();
 
   const NOTE_SEMITONE = {
     'C':0,'B#':0,'C#':1,'Db':1,'D':2,'D#':3,'Eb':3,'E':4,'Fb':4,
@@ -447,16 +340,10 @@
   };
   const SHARP_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
   const FLAT_NAMES  = ['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B'];
-  const FLAT_TONICS = new Set(['F','Bb','Eb','Ab','Db','Gb','D','G','C','A','E']); // fallback unused directly
   const FLAT_KEYS = new Set(['F','Bb','Eb','Ab','Db','Gb','Dm','Gm','Cm','Fm','Bbm','Ebm']);
-  const ALL_TONICS_SHARP_PREF = ['C','G','D','A','E','B','F#','Db','Ab','Eb','Bb','F'];
 
   function prefersFlat(key){ return FLAT_KEYS.has(key); }
-
-  function keyLabel(key){
-    const isMinor = key.endsWith('m');
-    return isMinor ? key.slice(0,-1)+'m' : key;
-  }
+  function keyLabel(key){ const isMinor = key.endsWith('m'); return isMinor ? key.slice(0,-1)+'m' : key; }
 
   function getScale(key, variant){
     variant = variant || 'natural';
@@ -488,17 +375,10 @@
     const isMinor = key.endsWith('m');
     const scale = getScale(key, variant);
     let qual, deg;
-    if(!isMinor){
-      qual = tetrad ? MAJ_QUAL_TETRA : MAJ_QUAL_TRIAD;
-      deg = MAJ_DEG;
-    } else if(variant==='harmonic'){
-      qual = HARM_MIN_QUAL; deg = HARM_MIN_DEG;
-    } else if(variant==='melodic'){
-      qual = MEL_MIN_QUAL; deg = MEL_MIN_DEG;
-    } else {
-      qual = tetrad ? MIN_QUAL_TETRA : MIN_QUAL_TRIAD;
-      deg = MIN_DEG;
-    }
+    if(!isMinor){ qual = tetrad ? MAJ_QUAL_TETRA : MAJ_QUAL_TRIAD; deg = MAJ_DEG; }
+    else if(variant==='harmonic'){ qual = HARM_MIN_QUAL; deg = HARM_MIN_DEG; }
+    else if(variant==='melodic'){ qual = MEL_MIN_QUAL; deg = MEL_MIN_DEG; }
+    else { qual = tetrad ? MIN_QUAL_TETRA : MIN_QUAL_TRIAD; deg = MIN_DEG; }
     return scale.map((note,i)=>({ name: note+qual[i], degree: deg[i] }));
   }
 
@@ -512,45 +392,29 @@
     const table = useFlat ? FLAT_NAMES : SHARP_NAMES;
     return table[ns]+m[3];
   }
-  function transposeChord(token, shift, useFlat){
-    return token.split('/').map(p=>transposeSingleNote(p, shift, useFlat)).join('/');
-  }
-  function transposeBody(body, shift, useFlat){
-    return body.replace(/\[([^\]]+)\]/g, (m,ch)=>'['+transposeChord(ch, shift, useFlat)+']');
-  }
+  function transposeChord(token, shift, useFlat){ return token.split('/').map(p=>transposeSingleNote(p, shift, useFlat)).join('/'); }
+  function transposeBody(body, shift, useFlat){ return body.replace(/\[([^\]]+)\]/g, (m,ch)=>'['+transposeChord(ch, shift, useFlat)+']'); }
 
   const TONIC_OPTIONS = ['C','C#','D','Eb','E','F','F#','G','Ab','A','Bb','B'];
-  function fillTonicSelect(sel){
-    sel.innerHTML = TONIC_OPTIONS.map(n=>`<option value="${n}">${n}</option>`).join('');
-  }
+  function fillTonicSelect(sel){ sel.innerHTML = TONIC_OPTIONS.map(n=>`<option value="${n}">${n}</option>`).join(''); }
   function allKeyOptions(){
     const majors = TONIC_OPTIONS.map(n=>({v:n, l:n+' maior'}));
     const minors = TONIC_OPTIONS.map(n=>({v:n+'m', l:n+' menor'}));
     return majors.concat(minors);
   }
-  function fillFullKeySelect(sel){
-    sel.innerHTML = allKeyOptions().map(o=>`<option value="${o.v}">${o.l}</option>`).join('');
-  }
+  function fillFullKeySelect(sel){ sel.innerHTML = allKeyOptions().map(o=>`<option value="${o.v}">${o.l}</option>`).join(''); }
 
-  // ---------- CONVERSOR DE CIFRA TRADICIONAL (Fase 1.2: normalização robusta) ----------
-  // Suporta acordes complexos: slash chords (G/B), extensões com parênteses (F7M(2), Am7(9)),
-  // sus/add/dim/aug, e tolera artefatos de colagem (">", "»", tags HTML residuais).
+  // ---------- CONVERSOR DE CIFRA TRADICIONAL ----------
   const CHORD_TOKEN_RE = /^[A-G][#b]?(?:(?:maj|min|dim|aug|sus|add|m)?\d{0,2}[Mm]?){0,3}(?:\([^()]{1,8}\))?(?:\/[A-G][#b]?)?$/;
   function isChordToken(tok){ return tok.length>0 && tok.length<=14 && CHORD_TOKEN_RE.test(tok); }
   function lineTokens(line){ const t=line.trim(); return t.length? t.split(/\s+/) : []; }
 
-  // Remove tags HTML e decodifica entidades comuns que possam ter vazado da colagem —
-  // os dados da música nunca devem guardar HTML, só texto com acordes entre colchetes.
   function sanitizePastedText(raw){
     let t = raw.replace(/<[^>]+>/g, '');
     t = t.replace(/&nbsp;/gi,' ').replace(/&amp;/gi,'&').replace(/&lt;/gi,'<').replace(/&gt;/gi,'>').replace(/&quot;/gi,'"').replace(/&#39;/gi,"'");
     return t;
   }
-  // Remove marcadores residuais de colagem (ex: '">', '»', '›') do início de uma linha,
-  // sem mexer no restante do conteúdo.
-  function stripLeadingArtifacts(line){
-    return line.replace(/^\s*(?:">|"|»|›|>)+\s*/, '');
-  }
+  function stripLeadingArtifacts(line){ return line.replace(/^\s*(?:">|"|»|›|>)+\s*/, ''); }
 
   function isChordOnlyLine(line){
     const clean = stripLeadingArtifacts(line);
@@ -559,6 +423,8 @@
   }
   function isSectionTag(line){ return /^\[[^\]]+\]/.test(line.trim()); }
   function isTabLine(line){ return /^[EBGDAe]\s*\|/.test(line.trim()) || /^\s*\|?-+\|?\s*$/.test(line); }
+
+  // FASE 1.2.1 — expande TABs em colunas reais (tab stop de 4) para as colunas dos acordes baterem com a letra
   function expandTabs(line){
     let out='';
     for(const ch of line){
@@ -566,6 +432,7 @@
     }
     return out;
   }
+
   function convertCifraTradicional(rawInput){
     const raw = sanitizePastedText(rawInput);
     const lines = raw.replace(/\r\n/g,'\n').split('\n').map(expandTabs);
@@ -596,7 +463,7 @@
         const nextIsLyric = next!==undefined && next.trim()!=='' && !isChordOnlyLine(next) && !isSectionTag(next) && !isTabLine(next);
         if(nextIsLyric){
           let merged = next;
-                  // FASE 1.2.1 — sempre usa a coluna real de cada acorde
+          // FASE 1.2.1 — sempre usa a coluna real de cada acorde
           positions.slice().sort((a,b)=>b.col-a.col).forEach(p=>{
             const at = Math.min(p.col, merged.length);
             merged = merged.slice(0,at) + '['+p.token+']' + merged.slice(at);
@@ -625,14 +492,10 @@
 
   // ---------- STORAGE ----------
   async function loadSongs(){
-    try{
-      const r = await window.storage.get('musicas', false);
-      return r ? JSON.parse(r.value) : [];
-    }catch(e){ return []; }
+    try{ const r = await storage.get('musicas'); return r ? JSON.parse(r.value) : []; }
+    catch(e){ return []; }
   }
-  async function saveSongs(songs){
-    try{ await window.storage.set('musicas', JSON.stringify(songs), false); }catch(e){}
-  }
+  async function saveSongs(songs){ try{ await storage.set('musicas', JSON.stringify(songs)); }catch(e){} }
 
   let songs = [];
   let currentDetailId = null;
@@ -657,7 +520,7 @@
   fillTonicSelect(destTonic);
   estTonic.value='G'; destTonic.value='E';
 
-  let sequence = []; // array of {index, chord, degree}
+  let sequence = [];
   const chordModeSelect = document.getElementById('chord-mode');
 
   function currentVariant(){
@@ -666,12 +529,8 @@
     return 'natural';
   }
   function isTetrad(){ return chordModeSelect.value==='tetrade'; }
-  function currentOriginKey(){
-    return estMode.value.startsWith('menor') ? estTonic.value+'m' : estTonic.value;
-  }
-  function currentDestKey(){
-    return destMode.value==='menor' ? destTonic.value+'m' : destTonic.value;
-  }
+  function currentOriginKey(){ return estMode.value.startsWith('menor') ? estTonic.value+'m' : estTonic.value; }
+  function currentDestKey(){ return destMode.value==='menor' ? destTonic.value+'m' : destTonic.value; }
 
   function renderRoda(){
     const key = currentOriginKey();
@@ -729,10 +588,7 @@
     });
   }
 
-  function addToSequence(i){
-    sequence.push(i);
-    renderSequence();
-  }
+  function addToSequence(i){ sequence.push(i); renderSequence(); }
 
   function renderSequence(){
     const key = currentOriginKey();
@@ -850,9 +706,7 @@
     showToast('Backup exportado.');
   });
 
-  document.getElementById('btn-import').addEventListener('click', ()=>{
-    document.getElementById('import-file').click();
-  });
+  document.getElementById('btn-import').addEventListener('click', ()=>{ document.getElementById('import-file').click(); });
   document.getElementById('import-file').addEventListener('change', (e)=>{
     const file = e.target.files[0];
     if(!file) return;
@@ -900,7 +754,6 @@
     });
   }
 
-  // delegação de evento única no container — mais confiável que anexar listener em cada card
   document.getElementById('songs-container').addEventListener('click', (e)=>{
     const card = e.target.closest('.song-card');
     if(!card) return;
@@ -908,11 +761,7 @@
     const song = songs.find(s=>s.id===id);
     if(!song) return;
     const actionEl = e.target.closest('[data-action]');
-    if(actionEl && actionEl.dataset.action === 'edit'){
-      e.stopPropagation();
-      openForm(song);
-      return;
-    }
+    if(actionEl && actionEl.dataset.action === 'edit'){ e.stopPropagation(); openForm(song); return; }
     if(actionEl && actionEl.dataset.action === 'delete'){
       e.stopPropagation();
       showConfirm(`Excluir "${song.title}"?`, async ()=>{
@@ -925,7 +774,7 @@
     openDetail(id);
   });
 
-  // ---------- CONFIRMAÇÃO E AVISOS CUSTOMIZADOS (evita depender de confirm()/alert() nativos) ----------
+  // ---------- CONFIRMAÇÃO E AVISOS CUSTOMIZADOS ----------
   function showConfirm(message, onConfirm, opts){
     opts = opts || {};
     const overlay = document.createElement('div');
@@ -938,25 +787,60 @@
           <button id="confirm-ok" class="btn ${opts.danger===false?'':'danger'}" style="flex:1;">${escapeHtml(opts.okLabel||'Excluir')}</button>
         </div>
       </div>`;
-    document.body.appendChild(overlay);
+    document.querySelector('.tonica-app').appendChild(overlay);
     overlay.querySelector('#confirm-cancel').addEventListener('click', ()=> overlay.remove());
     overlay.addEventListener('click', (e)=>{ if(e.target===overlay) overlay.remove(); });
-    overlay.querySelector('#confirm-ok').addEventListener('click', async ()=>{
-      overlay.remove();
-      await onConfirm();
-    });
+    overlay.querySelector('#confirm-ok').addEventListener('click', async ()=>{ overlay.remove(); await onConfirm(); });
   }
 
   function showToast(message){
     const el = document.createElement('div');
     el.style.cssText = 'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--surface-2);border:1px solid var(--gold-dim);color:var(--text);padding:10px 18px;border-radius:20px;font-size:13.5px;z-index:200;max-width:88%;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.4);';
     el.textContent = message;
-    document.body.appendChild(el);
+    document.querySelector('.tonica-app').appendChild(el);
     setTimeout(()=>{ el.style.transition='opacity .3s'; el.style.opacity='0'; setTimeout(()=>el.remove(),300); }, 2200);
   }
 
   function escapeHtml(str){
     return str.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  // ---------- EXIBIÇÃO EM DUAS LINHAS (acorde em cima, letra embaixo) ----------
+  // O dado salvo continua no formato [Acorde]letra (usado na caixa de edição,
+  // na transposição e nos diagramas). Só a exibição (detalhe e apresentação)
+  // é redesenhada aqui como cifra tradicional: linha de acordes acima da letra.
+  function renderCifraLine(line){
+    const re = /\[([^\]]+)\]/g;
+    let m; const matches = [];
+    while((m = re.exec(line))) matches.push({ token: m[1], index: m.index, length: m[0].length });
+    if(matches.length === 0) return escapeHtml(line);
+
+    let lyric = '', lastEnd = 0;
+    const cols = [];
+    matches.forEach(mt=>{
+      lyric += line.slice(lastEnd, mt.index);
+      cols.push(lyric.length);
+      lastEnd = mt.index + mt.length;
+    });
+    lyric += line.slice(lastEnd);
+
+    if(lyric.trim() === ''){
+      // linha só de acordes (intro, solo, tag de seção) — mantém o estilo de "chip" já usado
+      return matches.map(mt=>`<span class="chord-tag">${escapeHtml(mt.token)}</span>`).join(' ');
+    }
+
+    // monta a linha de acordes acima, respeitando a ordem e evitando sobreposição
+    let chordRow = '', nextCol = 0;
+    matches.forEach((mt,i)=>{
+      let col = Math.max(cols[i], nextCol);
+      if(col > chordRow.length) chordRow += ' '.repeat(col - chordRow.length);
+      chordRow += mt.token;
+      nextCol = chordRow.length + 1;
+    });
+    return `<span class="chord-line">${escapeHtml(chordRow)}</span>\n${escapeHtml(lyric)}`;
+  }
+  function renderTwoLineCifra(transposedBody){
+    return transposedBody.split('\n').map(renderCifraLine).join('\n');
   }
 
   function openDetail(id){
@@ -987,9 +871,7 @@
     return NOTE_SEMITONE[tonic];
   }
 
-  // detailShift = semitones away from the song's original key (single source of truth)
   function normalizeShift(raw){
-    // keep shift within -6..+5 for the most natural enharmonic spelling
     let s = ((raw % 12) + 12) % 12;
     if(s > 6) s -= 12;
     return s;
@@ -1000,17 +882,16 @@
     if(!song) return;
     const useFlat = detailShift < 0 || prefersFlat(song.originalKey);
     const transposed = transposeBody(song.body, detailShift, useFlat);
-    const html = escapeHtml(transposed).replace(/\[([^\]]+)\]/g, '<span class="chord-tag">$1</span>');
-    document.getElementById('detail-body').innerHTML = html;
+    document.getElementById('detail-body').innerHTML = renderTwoLineCifra(transposed);
     const label = detailShift===0 ? 'Tom original' : (detailShift>0 ? '+'+detailShift+' semitons' : detailShift+' semitons');
     document.getElementById('shift-indicator').textContent = label;
     updateCapoSuggestion(song);
     renderChordShapes(transposed);
   }
 
-  // ---------- ETAPA 4: CAPOTRASTE ----------
+  // ---------- CAPOTRASTE ----------
   function suggestCapo(targetSemitone, isMinor){
-    const easySet = isMinor ? [4,9,2] : [0,2,4,7,9]; // maior: C D E G A / menor: Em Am Dm
+    const easySet = isMinor ? [4,9,2] : [0,2,4,7,9];
     for(let c=0;c<=7;c++){
       const shape = ((targetSemitone - c)%12+12)%12;
       if(easySet.includes(shape)) return {capo:c, shapeSemitone:shape};
@@ -1032,7 +913,7 @@
       : `Capotraste na casa ${info.capo} — toque como se estivesse em ${shapeLabel}.`;
   }
 
-  // ---------- ETAPA 5: DIAGRAMAS DE ACORDE (notação compacta) ----------
+  // ---------- DIAGRAMAS DE ACORDE (notação compacta) ----------
   const OPEN_CHORD_SHAPES = {
     'C':['x',3,2,0,1,0], 'Cmaj7':['x',3,2,0,0,0], 'C7':['x',3,2,3,1,0],
     'D':['x','x',0,2,3,2], 'Dm':['x','x',0,2,3,1], 'D7':['x','x',0,2,1,2], 'Dmaj7':['x','x',0,2,2,2], 'Dm7':['x','x',0,2,1,1],
@@ -1087,7 +968,7 @@
     }).join('');
   }
 
-  // ---------- ETAPA 3: MODO APRESENTAÇÃO ----------
+  // ---------- MODO APRESENTAÇÃO ----------
   document.getElementById('btn-present-mode').addEventListener('click', ()=>{
     const song = songs.find(s=>s.id===currentDetailId);
     if(!song) return;
@@ -1107,7 +988,7 @@
       <div id="pm-scroll-area" style="flex:1;overflow-y:auto;padding:24px 20px 70vh;">
         <div id="pm-content" style="font-family:var(--font-mono);font-size:20px;line-height:2.3;white-space:pre-wrap;">${bodyHtml}</div>
       </div>`;
-    document.body.appendChild(overlay);
+    document.querySelector('.tonica-app').appendChild(overlay);
     let fontSize = 20, scrolling = false, scrollTimer = null;
     const content = overlay.querySelector('#pm-content');
     const scrollArea = overlay.querySelector('#pm-scroll-area');
@@ -1162,12 +1043,10 @@
 
   // ---------- REPERTÓRIO (SETLIST) ----------
   async function loadSetlists(){
-    try{ const r = await window.storage.get('setlists', false); return r ? JSON.parse(r.value) : []; }
+    try{ const r = await storage.get('setlists'); return r ? JSON.parse(r.value) : []; }
     catch(e){ return []; }
   }
-  async function saveSetlists(list){
-    try{ await window.storage.set('setlists', JSON.stringify(list), false); }catch(e){}
-  }
+  async function saveSetlists(list){ try{ await storage.set('setlists', JSON.stringify(list)); }catch(e){} }
 
   let setlists = [];
   let editingSetlistId = null;
@@ -1332,3 +1211,209 @@
   })();
 })();
 </script>
+<script type="module">
+  // ---------- IMPORTAÇÃO DE PDF (reaproveita a lógica testada em prototipo-pdf-cifra.html) ----------
+  // Bloco isolado (type="module") de propósito: não compartilha escopo com o <script> principal
+  // do app (a IIFE logo acima), então nada aqui pode colidir com o parser/conversor existente
+  // nem com qualquer outra função do app. A única ponte com o resto da tela é o DOM (o botão,
+  // o input de arquivo e o campo #form-body).
+  import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.155/pdf.min.mjs';
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.155/pdf.worker.min.mjs';
+  const STANDARD_FONT_DATA_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.155/standard_fonts/';
+
+// ===== Etapas 1-4: layout do PDF -> cifra em [Acorde]letra (só protótipo) =====
+const CHORD_RE = /^[A-G][#b]?(?:(?:maj|min|dim|aug|sus|add|m)?\d{0,2}[Mm]?){0,3}(?:\([^()]{1,8}\))?(?:\/[A-G][#b]?)?$/;
+const META_RE = /^(tom|afina[cç][aã]o|capo|capotraste|tuning|key|tom original)\s*:$/i;
+function isTagWord(w){ const m = w.match(/^\[([^\]]+)\]$/); return !!m && !isChord(m[1]); }
+function isChord(t){ return t.length>0 && t.length<=14 && CHORD_RE.test(t); }
+
+// Larguras relativas (Helvetica/Arial, por 1000) — usadas só quando a fonte da página é proporcional
+const W = {' ':278,'!':278,"'":191,'(':333,')':333,',':278,'-':333,'.':278,'/':278,':':278,';':278,'?':556,
+ A:667,B:667,C:722,D:722,E:667,F:611,G:778,H:722,I:278,J:500,K:667,L:556,M:833,N:722,O:778,P:667,Q:778,R:722,S:667,T:611,U:722,V:667,W:944,X:667,Y:667,Z:611,
+ a:556,b:556,c:500,d:556,e:556,f:278,g:556,h:556,i:222,j:222,k:500,l:222,m:833,n:556,o:556,p:556,q:556,r:333,s:500,t:278,u:556,v:500,w:722,x:500,y:500,z:500};
+function cw(ch){ if(W[ch]) return W[ch]; const b = ch.normalize('NFD')[0]; if(W[b]) return W[b]; return /\d/.test(ch)?556:556; }
+// Fonte monoespaçada? (>=90% dos itens com 2+ letras têm a mesma razão largura/(n*tamanho))
+function isMonospacePage(items){
+  // compara dois modelos (monoespaçado 0,6em vs. tabela Helvetica) e usa o que erra menos
+  const sample = items.filter(it=>it.text.length>=1 && !/\s/.test(it.text) && it.height>0 && it.width>0);
+  if(!sample.length) return true;
+  let eMono=0, eProp=0;
+  sample.forEach(it=>{
+    const a = it.width/it.height;
+    const m = 0.6*it.text.length;
+    const p = it.text.split('').reduce((t,ch)=>t+cw(ch),0)/1000;
+    eMono += Math.abs(a-m)/a; eProp += Math.abs(a-p)/a;
+  });
+  return eMono <= eProp;
+}
+function charOffsets(text, mono){
+  if(mono) return text.split('').map((_,i)=>i/text.length);
+  const w = text.split('').map(cw); const tot = w.reduce((a,b)=>a+b,0); let acc=0;
+  return w.map(v=>{ const o=acc/tot; acc+=v; return o; });
+}
+
+// Etapa 1: agrupa itens pela linha (mesmo y) e monta caracteres com posição x
+function buildLines(items, mono){
+  const its = items.filter(it=>it.text!=='').slice().sort((a,b)=>a.y-b.y || a.x-b.x);
+  const groups = [];
+  for(const it of its){
+    const g = groups[groups.length-1];
+    if(g && Math.abs(it.y - g.y) <= 2.5) g.items.push(it); else groups.push({y: it.y, items:[it]});
+  }
+  return groups.map(g=>{
+    g.items.sort((a,b)=>a.x-b.x);
+    const chars = []; let prevEnd = null; let size = 10;
+    for(const it of g.items){
+      size = it.height || size;
+      if(prevEnd!==null && it.x - prevEnd > 0.2*size && !/^\s/.test(it.text) && !(chars.length && /\s$/.test(chars[chars.length-1].ch))){
+        chars.push({ch:' ', x:prevEnd});
+      }
+      const off = charOffsets(it.text, mono);
+      for(let i=0;i<it.text.length;i++) chars.push({ch:it.text[i], x: it.x + it.width*off[i]});
+      prevEnd = it.x + it.width;
+    }
+    const text = chars.map(c=>c.ch).join('');
+    const itemWords = [];
+    g.items.forEach(it=>{ const off = charOffsets(it.text, mono); const re=/\S+/g; let m; while((m=re.exec(it.text))) itemWords.push({w:m[0], x: it.x + it.width*off[m.index]}); });
+    return { y: g.y, chars, text, size, itemWords };
+  });
+}
+function wordsOf(line){
+  const out = []; const re = /\S+/g; let m;
+  while((m = re.exec(line.text))) out.push({ w: m[0], x: line.chars[m.index].x, i: m.index });
+  // acordes encostados (sem espaço entre os itens) são separados pelos itens do PDF
+  if(!out.every(w=>isChord(w.w)) && line.itemWords.length && line.itemWords.every(w=>isChord(w.w))) return line.itemWords;
+  return out;
+}
+function median(arr){ if(!arr.length) return 0; const s=arr.slice().sort((a,b)=>a-b); return s[Math.floor(s.length/2)]; }
+
+// Etapas 2 e 3: identifica linhas de acordes e junta com a letra pela posição real x
+function linesToCifra(lines){
+  const spacing = median(lines.slice(1).map((l,i)=>l.y-lines[i].y).filter(d=>d>0));
+  const gapLimit = spacing*1.6;
+  const stats = { linhas: lines.length, linhasAcordes: 0, mescladas: 0, soAcordes: 0 };
+  const out = [];
+  let i = 0;
+  while(i < lines.length){
+    const line = lines[i];
+    if(i>0 && spacing && (line.y - lines[i-1].y) > gapLimit) out.push('');
+    const ws = wordsOf(line);
+    const chordLine = ws.length>0 && ws.every(w=>isChord(w.w));
+    if(ws.length && META_RE.test(ws[0].w)){ out.push(line.text.replace(/\s+$/,'')); i++; continue; }
+    const tagChords = ws.length>1 && isTagWord(ws[0].w) && ws.slice(1).every(w=>isChord(w.w));
+    if(tagChords){
+      stats.linhasAcordes++; stats.soAcordes++;
+      out.push(ws[0].w+' '+ws.slice(1).map(w=>'['+w.w+']').join(' '));
+      i++; continue;
+    }
+    const labelLine = ws.length>1 && /:$/.test(ws[0].w) && ws.slice(1).every(w=>isChord(w.w));
+    if(labelLine){
+      stats.linhasAcordes++; stats.soAcordes++;
+      out.push(ws[0].w+' '+ws.slice(1).map(w=>'['+w.w+']').join(' '));
+      i++; continue;
+    }
+    if(chordLine){
+      stats.linhasAcordes++;
+      const next = lines[i+1];
+      const nextWs = next ? wordsOf(next) : [];
+      const nextIsLyric = next && (next.y-line.y) <= gapLimit && nextWs.length>0 && !(nextWs.length===1 && isTagWord(nextWs[0].w)) && !nextWs.every(w=>isChord(w.w)) && !(nextWs.length>1 && /:$/.test(nextWs[0].w) && nextWs.slice(1).every(w=>isChord(w.w)));
+      if(nextIsLyric){
+        let chars = next.chars.map(c=>({...c}));
+        const avg = next.chars.length>1 ? (next.chars[next.chars.length-1].x - next.chars[0].x)/(next.chars.length-1) : 5;
+        const ins = ws.map(w=>{
+          let idx = 0, best = Infinity;
+          chars.forEach((c,k)=>{ const d=Math.abs(c.x-w.x); if(d<best){best=d; idx=k;} });
+          if(w.x > chars[chars.length-1].x + avg) idx = chars.length;
+          return { idx, x: w.x, w: w.w };
+        }).sort((a,b)=> b.idx-a.idx || b.x-a.x);
+        let txt = next.text;
+        ins.forEach(p=>{ txt = txt.slice(0,p.idx) + '['+p.w+']' + txt.slice(p.idx); });
+        out.push(txt.replace(/\s+$/,''));
+        stats.mescladas++;
+        i += 2; continue;
+      }
+      stats.soAcordes++;
+      out.push(ws.map(w=>'['+w.w+']').join(' '));
+      i++; continue;
+    }
+    out.push(line.text.replace(/\s+$/,''));
+    i++;
+  }
+  return { text: out.join('\n'), stats };
+}
+
+function layoutToCifra(layout){
+  const parts = []; const stats = [];
+  layout.pages.forEach(p=>{
+    const lines = buildLines(p.items, isMonospacePage(p.items));
+    const r = linesToCifra(lines);
+    parts.push(r.text); stats.push({pagina:p.pageNumber, ...r.stats});
+  });
+  return { text: parts.join('\n\n'), stats };
+}
+
+function debugDump(layout, pageNumber, maxLines){
+  const p = layout.pages.find(x=>x.pageNumber===pageNumber) || layout.pages[0];
+  const its = p.items.filter(it=>it.text!=='').slice().sort((a,b)=>a.y-b.y || a.x-b.x);
+  const groups = [];
+  for(const it of its){ const g = groups[groups.length-1]; if(g && Math.abs(it.y-g.y)<=2.5) g.items.push(it); else groups.push({y:it.y, items:[it]}); }
+  const lines = groups.slice(0, maxLines||40).map(g=>'y='+g.y.toFixed(1)+'  '+g.items.sort((a,b)=>a.x-b.x).map(it=>'{x='+it.x.toFixed(1)+' w='+it.width.toFixed(1)+' "'+it.text+'"}').join(' '));
+  return 'PÁGINA '+p.pageNumber+' (itens brutos)\n'+lines.join('\n');
+}
+
+  async function extractPdfLayout(source){
+    const data = source instanceof ArrayBuffer ? new Uint8Array(source) : source;
+    const pdf = await pdfjsLib.getDocument({ data, standardFontDataUrl: STANDARD_FONT_DATA_URL }).promise;
+    const pages = []; let total = 0;
+    for(let n=1;n<=pdf.numPages;n++){
+      const page = await pdf.getPage(n);
+      const viewport = page.getViewport({ scale: 1 });
+      const tc = await page.getTextContent();
+      const items = tc.items.filter(it=>typeof it.str==='string').map(it=>{
+        const [a,b,c,d,e,f] = it.transform;
+        return { text: it.str, x: e, y: viewport.height - f, width: it.width, height: it.height || Math.hypot(c,d) || 0 };
+      });
+      total += items.length;
+      pages.push({ pageNumber:n, width:viewport.width, height:viewport.height, items });
+    }
+    return { pages, isLikelyScanned: total===0 || pages.every(p=>p.items.every(it=>it.text.trim()==='')) };
+  }
+
+  async function tonicaExtractPdfToCifra(file){
+    const layout = await extractPdfLayout(await file.arrayBuffer());
+    if(layout.isLikelyScanned) return { ok:false, reason:'scanned' };
+    const r = layoutToCifra(layout);
+    return { ok:true, text: r.text };
+  }
+
+  // ---------- Ligação com a tela (só os 3 elementos do card "Importar de PDF") ----------
+  const pdfInput = document.getElementById('pdf-input');
+  const btnImportPdf = document.getElementById('btn-import-pdf');
+  const pdfStatus = document.getElementById('pdf-import-status');
+  if(btnImportPdf && pdfInput){
+    btnImportPdf.addEventListener('click', ()=> pdfInput.click());
+    pdfInput.addEventListener('change', async ()=>{
+      const file = pdfInput.files[0];
+      if(!file) return;
+      pdfStatus.textContent = 'Lendo PDF...';
+      btnImportPdf.disabled = true;
+      try{
+        const r = await tonicaExtractPdfToCifra(file);
+        if(!r.ok){
+          pdfStatus.textContent = 'Nenhum texto extraível nesse PDF — provável arquivo escaneado (imagem). Precisa de OCR, que ainda não está disponível.';
+        } else {
+          const formBody = document.getElementById('form-body');
+          if(formBody) formBody.value = r.text;
+          pdfStatus.textContent = 'PDF importado! Revise o campo "Cifra" acima antes de salvar.';
+        }
+      }catch(err){
+        pdfStatus.textContent = 'Erro ao importar PDF: ' + (err && err.message ? err.message : String(err));
+        console.error(err);
+      }
+      btnImportPdf.disabled = false;
+      pdfInput.value = '';
+    });
+  }
+</script>
+</body>
+</html>
